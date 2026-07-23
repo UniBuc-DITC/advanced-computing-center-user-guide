@@ -53,7 +53,7 @@ After ensuring you are connected to the internal ACC/UB network (you can verify 
 
     `ssh example@hpc-nodegpu01.acc-ub.local`
 
-- For a virtual machine on the HCI cluster, connect either using [SSH](https://en.wikipedia.org/wiki/Secure_Shell) to the domain or IP address of the VM you requested or, if the application you requested has a web UI, connect directly to it at `http://10.23.21.<example>'`.
+- For a virtual machine on the HCI cluster, connect either using [SSH](https://en.wikipedia.org/wiki/Secure_Shell) to the domain or IP address of the VM you requested or, if the application you requested has a web UI, connect directly to it at `http://10.23.21.<example>`.
 
 If you encounter issues with connecting to the infrastructure (after your access request has been approved and confirmed!), please contact the ACC administrators.
 
