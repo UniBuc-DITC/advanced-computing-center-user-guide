@@ -1,24 +1,14 @@
-# High Performance Compute - CPU cluster
+# SLURM User Guide
 
-This page contains details on the CPU cluster.
+## Summary
 
-## Hardware configuration
+The HPC cluster uses [Slurm workload manager](https://slurm.schedmd.com/overview.html) as our job scheduler. This page provides an overview of our Slurm config, basic usage and best practices.
 
-The compute system currently consists of 20 identical nodes, with the following hardware specifications:
+Reading the official [Slurm user guide](https://slurm.schedmd.com/quickstart.html) as well is recommended.
 
-- **CPU:** AMD EPYC 7713 (2 sockets, each with 64 cores, for 128 physical cores; due to hyperthreading, we have 256 hardware threads)
+## Running jobs on the CPU cluster
 
-- **Memory:** 2 TiB of RAM
-
-- **Storage**: the root filesystem is installed on 3 NVMe drives in RAID 5 configuration (so we only have 3.5 TiB available space in total). Each node is also connected to the shared network storage (available under `/mnt`), which has a capacity of 16+ TiB.
-
-We have two extra nodes (`ctrl01` and `db01`), with identical hardware specs, which are used for additional tasks (Slurm controller, Slurm accounting database, NFS v4.2 server etc), so parts of their cores and memory are reserved for system tasks.
-
-## Running jobs on the HPC-CPU cluster
-
-The HPC-CPU cluster is managed using the [Slurm](https://slurm.schedmd.com/overview.html) job scheduler. Please consult the [Slurm quickstart guide](https://slurm.schedmd.com/quickstart.html) for an overview of the system.
-
-To launch a job spanning multiple compute nodes, connect to the **controller node** and either use the `srun` command (for interactive jobs) or the `sbatch` command (for batch jobs / scripts).
+To launch a job, connect to the **controller node** and either use the `srun` command (for interactive jobs) or the `sbatch` command (for batch jobs / scripts).
 
 If your program/tool is using the [Message-Passing Interface](https://en.wikipedia.org/wiki/Message_Passing_Interface) for parallelization, you can run the `mpirun` command under Slurm to automatically distribute the work across all of the nodes requested by your job.
 
@@ -49,3 +39,11 @@ Component: munge
 ```
 
 You should follow [these instructions from `conda-forge`](https://conda-forge.org/docs/user/tipsandtricks/#using-external-message-passing-interface-mpi-libraries) on how to use an external MPI library. You will have to run a command such as `conda install "openmpi=X.Y.*=external_*"` or `conda install "mpich=X.Y.*=external_*`, where `X.Y` should match the major and minor version numbers for your selected MPI implementation module. This will also require you to have the corresponding module active whenever you run a Python program which uses `mpi4py`.
+
+## Running jobs on the GPU node
+
+The available GPU resources are managed through Slurm's [GRES](https://slurm.schedmd.com/gres.html) system.
+
+To run a job which requires one or more GPU devices, pass the `--partition=gpu --gpus=<number of GPUs>` flags to SLURM.
+
+For more specific resource allocation (for example, if you want a specific GPU), use the `--gres` flag: `--gres=gpu:nvidia_h100_80gb_hbm3:<num_gpus>`

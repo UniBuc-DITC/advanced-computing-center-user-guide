@@ -7,9 +7,10 @@ edit_uri: 'edit/main/docs'
 nav:
   - Home: index.md
   - Getting started: getting-started.md
-  - CPU cluster: hpc-cpu.md
-  - GPU node: hpc-gpu.md
+  - HPC cluster: hpc.md
+  - SLURM guide: slurm.md
   - Virtual machines platform: hci.md
   - Storage: storage.md
+  - Network: network.md
   - VPN access: vpn.md
 theme: readthedocs
