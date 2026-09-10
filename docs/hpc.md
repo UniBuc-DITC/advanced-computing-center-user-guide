@@ -6,7 +6,6 @@ The [high-performance compute](https://en.wikipedia.org/wiki/High-performance_co
 
 The servers run [Linux](https://en.wikipedia.org/wiki/Linux), more specifically [Ubuntu Server](https://ubuntu.com/download/server) 24.04. They feature a shared filesystem ([NFS v4.2](https://en.wikipedia.org/wiki/Network_File_System) and [NVMe over TCP](https://en.wikipedia.org/wiki/NVMe_over_TCP)), [InfiniBand](https://en.wikipedia.org/wiki/InfiniBand) for high-speed inter-node communication and [RDMA](https://en.wikipedia.org/wiki/Remote_direct_memory_access), as well as an [environment modules](https://envmodules.io/) system. Job scheduling is handled by [SLURM](slurm.md).
 
-
 ## CPU nodes
 
 ### Hardware configuration
@@ -39,3 +38,17 @@ Since the cores and memory are shared with all other users on the node, please b
 To access the GPUs, your job must be submitted to the `gpu` partition and must explicitly request them by using the `--gpus` flag in SLURM.
 
 Be aware that some of the GPUs are currently dedicated/reserved for certain research groups, so not all of them might be available to SLURM.
+
+### Running interactive jobs on the GPU node
+
+If you want to run a shell/interactive job on the GPU node (e.g. a [Jupyter](https://jupyter.org/) notebook), you can request a job allocation for a script which does nothing but wait:
+
+```shell
+sbatch --partition=gpu --gpus=1 --time=01:00:00 --account=acc-YOUR-ACCOUNT <<< '#!/bin/bash
+sleep 1h
+'
+```
+
+Change the job's time limit, number of GPUs and the `sleep` time as required.
+
+Once the job starts running, connect to the node using `ssh`, as usual. The [`pam_slurm_adopt`](https://slurm.schedmd.com/pam_slurm_adopt.html) module will ensure your SSH session gets "adopted" into the running job allocation. You can then start the Jupyter server (or any other app) and use [SSH tunelling](https://www.ssh.com/academy/ssh/tunneling-example) to forward the required ports back to your computer.
